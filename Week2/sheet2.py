@@ -20,6 +20,8 @@ class TicTacToe():
     #########################
 
     def RandomTurn(self):
+        rand_cell = s1.GetRandomElement(self.EmptyCells)
+        self.Board[rand_cell] = self.Turn
         return
 
 
@@ -34,6 +36,12 @@ class TicTacToe():
             return
         # Turn the input from a string into an integer
         Position = int(Input)
+        if Position in self.EmptyCells:
+            self.Board[Position] = self.Turn
+            return 
+        else:
+            print('Cell is already filled! Try again.')
+            self.HumanTurn()
 
         ###############
         # Finish code: 
@@ -41,10 +49,28 @@ class TicTacToe():
 
 
     def Update(self):
+        self.EmptyCells = s1.GetEmptyCells(self.Board)
+        if self.Turn == 'X':
+            self.StatesX.append(s1.ListToString(self.Board))
+            self.Turn = 'O'
+        elif self.Turn == 'O':
+            self.StatesO.append(s1.ListToString(self.Board))
+            self.Turn = 'X'
+        self.IsGameOver()
         return
 
 
     def HumanVsRandom(self):
+        while self.Winner == None:
+            self.__str__()
+            print(self.Turn)
+            if self.Turn == 'X':
+                self.HumanTurn()
+            elif self.Turn == 'O':
+                self.RandomTurn()
+            self.Update()
+        self.__str__()
+        print('Winner -', self.Winner)
         return
 
 
@@ -124,5 +150,5 @@ print(Game)
 #print("Board: ", Game.Board, "\nEmpty Cells: ", Game.EmptyCells, "\nTurn: ", Game.Turn, "\nWinner: ", Game.Winner, "\nStatesX: ", Game.StatesX, "\nStatesO: ", Game.StatesO)
 
 # Task4:
-#Game = TicTacToe()
-#Game.HumanVsRandom()
+Game = TicTacToe()
+Game.HumanVsRandom()
